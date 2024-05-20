@@ -16,6 +16,7 @@ import (
 //
 
 var (
+	Aquired        = map[string]interface{}{}
 	DefaultOptions = &AquireOptions{}
 
 	// Errors
@@ -53,6 +54,7 @@ func (err *aquireUnmarshalError) Error() string {
 //
 
 type AquireOptions struct {
+	IgnoreCache bool
 	IgnoreEmpty bool
 }
 
@@ -79,6 +81,15 @@ func (options *AquireOptions) Load(opts ...AquireOption) error {
 // Option
 
 type AquireOption func(*AquireOptions) error
+
+// Ignore Cache
+
+func IgnoreCache() AquireOption {
+	return func(o *AquireOptions) error {
+		o.IgnoreCache = true
+		return nil
+	}
+}
 
 // Ignore Empty
 
@@ -108,18 +119,20 @@ func Aquire[T any](key string, opts ...AquireOption) (*T, error) {
 func AquireWithOptions[T any](key string, options *AquireOptions) (*T, error) {
 	// read cache
 
-	iface, found := aquired[key]
-	value, ok := iface.(T)
+	if !options.IgnoreCache {
+		iface, found := Aquired[key]
+		value, ok := iface.(T)
 
-	if found && ok {
-		return &value, nil
+		if found && ok {
+			return &value, nil
+		}
 	}
 
 	// read env
 
 	data := os.Getenv(key)
 
-	if data == "" && !options.IgnoreEmpty {
+	if !options.IgnoreEmpty && data == "" {
 		return nil, &aquireEmptyError{key}
 	}
 
@@ -131,7 +144,7 @@ func AquireWithOptions[T any](key string, options *AquireOptions) (*T, error) {
 		return nil, &aquireUnmarshalError{Key: key, UnmarshalError: err}
 	}
 
-	aquired[key] = v
+	Aquired[key] = v
 
 	return v, nil
 }
