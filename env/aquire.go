@@ -108,8 +108,8 @@ func Aquire[T any](key string, opts ...AquireOption) (*T, error) {
 func AquireWithOptions[T any](key string, options *AquireOptions) (*T, error) {
 	// read cache
 
-	value_interface, found := aquired[key]
-	value, ok := value_interface.(T)
+	iface, found := aquired[key]
+	value, ok := iface.(T)
 
 	if found && ok {
 		return &value, nil
@@ -117,15 +117,15 @@ func AquireWithOptions[T any](key string, options *AquireOptions) (*T, error) {
 
 	// read env
 
-	value_string := os.Getenv(key)
+	data := os.Getenv(key)
 
-	if value_string == "" && !options.IgnoreEmpty {
+	if data == "" && !options.IgnoreEmpty {
 		return nil, &aquireEmptyError{key}
 	}
 
 	// unmarshal
 
-	v, err := Unmarshal[T]([]byte(value_string))
+	v, err := Unmarshal[T]([]byte(data))
 
 	if err != nil {
 		return nil, &aquireUnmarshalError{Key: key, UnmarshalError: err}
