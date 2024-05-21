@@ -144,7 +144,11 @@ func AquireWithOptions[T any](key string, options *AquireOptions) (*T, error) {
 		return nil, &aquireUnmarshalError{Key: key, UnmarshalError: err}
 	}
 
-	Aquired[key] = v
+	// write cache
+
+	if !options.IgnoreCache {
+		Aquired[key] = v
+	}
 
 	return v, nil
 }
