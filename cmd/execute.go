@@ -1,15 +1,33 @@
 package cmd
 
 import (
+	"fmt"
 	"os"
 
-	"gg/cmd/root"
+	"github.com/spf13/cobra"
+
+	"gg/cmd/generate"
 )
 
-func init() {}
+func init() {
+	// sub commands
+
+	Command.AddCommand(generate.Command)
+}
+
+var Command = &cobra.Command{
+	Use:   "gg",
+	Short: "gg",
+	Long:  `gg`,
+	Run:   Run,
+}
+
+func Run(cmd *cobra.Command, args []string) {
+	fmt.Println("Root Command")
+}
 
 func Execute() {
-	if err := root.Command.Execute(); err != nil {
+	if err := Command.Execute(); err != nil {
 		os.Exit(1)
 	}
 }

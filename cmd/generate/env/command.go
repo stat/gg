@@ -5,11 +5,13 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"gg/cmd/generate"
+	"gg/cmd/generate/env/tests"
 )
 
 func init() {
-	generate.Command.AddCommand(Command)
+	// sub commands
+
+	Command.AddCommand(tests.Command)
 }
 
 var (

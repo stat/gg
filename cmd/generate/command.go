@@ -5,11 +5,13 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"gg/cmd/root"
+	"gg/cmd/generate/env"
 )
 
 func init() {
-	root.Command.AddCommand(Command)
+	// sub commands
+
+	Command.AddCommand(env.Command)
 }
 
 var (
