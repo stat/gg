@@ -10,33 +10,35 @@ import (
 	"gg/env"
 )
 
-func TestEnvAquireEmpty(t *testing.T) {
-	key := uuid.NewString()
-	result, err := env.Aquire[any](key, env.IgnoreEmpty())
+func testEnvAquire[T any](t *testing.T, key string, expected error, opts ...env.AquireOption) *T {
+	if key == "" {
+		key = uuid.NewString()
+	}
 
-	assert.NotNil(t, err)
-	assert.IsType(t, env.AquireUnmarshalError, err)
-	assert.Nil(t, result)
+	result, err := env.Aquire[T](key, opts...)
+
+	if expected != nil {
+		assert.NotNil(t, err)
+		assert.IsType(t, expected, err)
+	} else {
+		assert.Nil(t, err)
+		assert.NotNil(t, result)
+	}
+
+	return result
+}
+
+func TestEnvAquireEmpty(t *testing.T) {
+	testEnvAquire[any](t, "", env.AquireUnmarshalError, env.IgnoreEmpty())
 }
 
 func TestEnvAquireEmptyError(t *testing.T) {
-	key := uuid.NewString()
-	result, err := env.Aquire[any](key)
-
-	assert.NotNil(t, err)
-	assert.IsType(t, env.AquireEmptyError, err)
-	assert.Nil(t, result)
+	testEnvAquire[any](t, "", env.AquireEmptyError)
 }
 
 func TestEnvAquireEmptyString(t *testing.T) {
 	key := uuid.NewString()
 	os.Setenv(key, "\"\"")
 
-	result, err := env.Aquire[string](key)
-
-	assert.Nil(t, err)
-	assert.NotNil(t, result)
-}
-
-func TestEnvAquireString(t *testing.T) {
+	testEnvAquire[any](t, key, nil)
 }
