@@ -17,10 +17,10 @@ var (
 		Use:   "generate",
 		Short: "Runs all generators",
 		Long:  `Runs all generators`,
-		Run:   Execute,
+		Run:   Run,
 	}
 )
 
-func Execute(cmd *cobra.Command, args []string) {
-	fmt.Println("I'M HERE!")
+func Run(cmd *cobra.Command, args []string) {
+	fmt.Println("Generate Command")
 }

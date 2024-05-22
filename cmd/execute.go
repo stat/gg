@@ -4,8 +4,6 @@ import (
 	"os"
 
 	"gg/cmd/root"
-
-	_ "gg/cmd/generate"
 )
 
 func init() {}
