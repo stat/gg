@@ -1,1 +1,1 @@
-# gg
+# Golang Generics
