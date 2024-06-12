@@ -1,5 +1,5 @@
-package utils
+package ptr
 
-func ByRef[T any](v T) *T {
+func Ref[T any](v T) *T {
 	return &v
 }
