@@ -1,38 +1,30 @@
 package reflects
 
 import (
-	"reflect"
-
 	"gg/instructions"
+	"gg/reflects/types"
 )
 
 //
 // Types
 //
 
-// Field
-
-type Field struct {
-	reflect.StructField
-	reflect.Type
-}
-
-// FieldFn
-
-type FieldFn[T any] func(T, *Field) (instructions.Instruction, error)
-
 //
 // Fields
 //
 
-func Fields[T any](source T, fns ...FieldFn[T]) error {
+func Fields[T any](source T, fns ...types.FieldFn[T]) error {
 	v := Value(source)
 	t := v.Type()
 	n := t.NumField()
 
 	for i := 0; i < n; i++ {
 		f := t.Field(i)
-		field := &Field{f, t}
+
+		field := &types.Field{
+			StructField: f,
+			Type:        t,
+		}
 
 		err := ExecuteFieldFns(source, field, fns...)
 
@@ -48,7 +40,7 @@ func Fields[T any](source T, fns ...FieldFn[T]) error {
 // Execute Field Fns
 //
 
-func ExecuteFieldFns[T any](source T, f *Field, fns ...FieldFn[T]) error {
+func ExecuteFieldFns[T any](source T, f *types.Field, fns ...types.FieldFn[T]) error {
 	for _, fn := range fns {
 		op, err := fn(source, f)
 
