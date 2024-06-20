@@ -8,8 +8,8 @@ import (
 
 func IgnorePrivate[T any](source T, field *types.Field) (instructions.Instruction, error) {
 	if !assertions.IsFieldExported(field.StructField) {
-		return instructions.Skip, nil
+		return instructions.Stop, nil
 	}
 
-	return instructions.Continue, nil
+	return instructions.Next, nil
 }

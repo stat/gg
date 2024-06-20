@@ -3,6 +3,8 @@ package instructions
 type Instruction int
 
 const (
-	Continue Instruction = iota
-	Skip
+	NOOP Instruction = iota
+	Next
+	Recurse
+	Stop
 )
