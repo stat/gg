@@ -1,15 +1,15 @@
 package fields_fns
 
 import (
-	"gg/instructions"
 	"gg/reflects/assertions"
 	"gg/reflects/types"
+	"gg/stack"
 )
 
-func IgnorePrivate[T any](source T, field *types.Field) (instructions.Instruction, error) {
+func IgnorePrivate[T any](source T, field *types.Field) (stack.Instruction, error) {
 	if !assertions.IsFieldExported(field.StructField) {
-		return instructions.Stop, nil
+		return stack.Stop, nil
 	}
 
-	return instructions.Next, nil
+	return stack.Next, nil
 }

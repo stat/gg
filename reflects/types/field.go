@@ -3,7 +3,7 @@ package types
 import (
 	"reflect"
 
-	"gg/instructions"
+	"gg/stack"
 )
 
 // Field
@@ -15,4 +15,4 @@ type Field struct {
 
 // FieldFn
 
-type FieldFn[T any] func(T, *Field) (instructions.Instruction, error)
+type FieldFn[T any] func(T, *Field) (stack.Instruction, error)

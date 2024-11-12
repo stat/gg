@@ -1,8 +1,8 @@
 package executors
 
 import (
-	"gg/instructions"
 	"gg/reflects/types"
+	"gg/stack"
 )
 
 //
@@ -18,11 +18,11 @@ func FieldFns[T any](source T, f *types.Field, fns ...types.FieldFn[T]) error {
 		}
 
 		switch op {
-		case instructions.Next:
+		case stack.Next:
 			continue
-		case instructions.Stop:
+		case stack.Stop:
 			break
-		case instructions.Recurse:
+		case stack.Recurse:
 
 		}
 	}

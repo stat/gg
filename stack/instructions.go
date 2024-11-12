@@ -1,4 +1,4 @@
-package instructions
+package stack
 
 type Instruction int
 
