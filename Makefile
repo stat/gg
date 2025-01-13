@@ -22,6 +22,10 @@ LDFLAGS  := -X=$(TARGET)/pkg/version.Build=$(BUILD) \
             -X=$(TARGET)/pkg/version.Patch=$(PATCH) \
             -X=$(TARGET)/pkg/version.String=${MAJOR}.${MINOR}.${PATCH}
 
+.PHONY: gen
+gen: ## generate code
+	@$(GO) generate ./tools/tools.go
+
 .PHONY: test
 test: ## run tests
 	@$(GO_TEST) -ldflags="$(LDFLAGS)" -tags="${GOTAGS}" -v $(TESTS)
